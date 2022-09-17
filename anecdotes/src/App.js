@@ -1,5 +1,13 @@
 import { useState } from 'react'
 
+const Button = ({ text, onClick }) => {
+  return (
+    <button onClick={onClick}>
+      {text}
+    </button>
+  )
+}
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -13,9 +21,22 @@ const App = () => {
    
   const [selected, setSelected] = useState(0)
 
+  const handleNextAnecdote = () => {
+    const getRandomInt = (min, max) => {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
+    }
+    const randomNo = getRandomInt(0, anecdotes.length);
+    setSelected(randomNo);
+  }
+
   return (
     <div>
       {anecdotes[selected]}
+      <div>
+        <Button text="next anecdote" onClick={handleNextAnecdote} />
+      </div>
     </div>
   )
 }
