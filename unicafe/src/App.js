@@ -8,7 +8,7 @@ const Heading = ({ name }) => {
   )
 };
 
-const Button = ({ text, onClick}) => {
+const Button = ({ text, onClick }) => {
   return (
     <button onClick={onClick}>
       {text}
@@ -16,18 +16,24 @@ const Button = ({ text, onClick}) => {
   );
 };
 
-const StatisticLine = ({ text, value}) => {
+const StatisticLine = ({ text, value }) => {
   if (text === 'positive') {
     return (
-      <p>{text} {value} %</p>
-    )
+      <>
+        <td>{text}</td>
+        <td>{value} %</td>
+      </>
+    );
   }
   return (
-    <p>{text} {value}</p>
+    <>
+      <td>{text}</td>
+      <td>{value}</td>
+    </>
   );
 };
 
-const Statistic = ({ good, neutral, bad}) => {
+const Statistic = ({ good, neutral, bad }) => {
   if (good === 0 && neutral === 0 && bad === 0) {
     return (
       <p>No feedback given</p>
@@ -35,14 +41,28 @@ const Statistic = ({ good, neutral, bad}) => {
   }
   const totalSum = good + neutral + bad;
   return (
-    <>
-      <StatisticLine text="good" value={good}/>
-      <StatisticLine text="neutral" value={neutral}/>
-      <StatisticLine text="bad" value={bad}/>
-      <StatisticLine text="all" value={totalSum}/>
-      <StatisticLine text="average" value={(good - bad) / totalSum}/>
-      <StatisticLine text="positive" value={((good / totalSum) * 100)}/>
-    </>
+    <table>
+      <tbody>
+        <tr>
+          <StatisticLine text="good" value={good}/>
+        </tr>
+        <tr>
+          <StatisticLine text="neutral" value={neutral}/>
+        </tr>
+        <tr>
+          <StatisticLine text="bad" value={bad}/>
+        </tr>
+        <tr>
+          <StatisticLine text="all" value={totalSum}/>
+        </tr>
+        <tr>
+          <StatisticLine text="average" value={(good - bad) / totalSum}/>
+        </tr>
+        <tr>
+          <StatisticLine text="positive" value={((good / totalSum) * 100)}/>
+        </tr>
+      </tbody>
+    </table>
   );
 };
 
