@@ -16,35 +16,32 @@ const Button = ({ text, onClick}) => {
   );
 };
 
-const ShowStats = ({ type, total}) => <p>{type} {total}</p>;
-
-const CalculatedStats = ({ type, total, subTotal }) => {
-  const average = total > 0 ? (subTotal / total) : 0;
-
-  if (type === "positive") {
-    const percentage = average * 100;
+const StatisticLine = ({ text, value}) => {
+  if (text === 'positive') {
     return (
-      <p>{type} {percentage} %</p>
-    );
+      <p>{text} {value} %</p>
+    )
   }
-
   return (
-    <p>{type} {average}</p>
-  )
-}
+    <p>{text} {value}</p>
+  );
+};
 
 const Statistic = ({ good, neutral, bad}) => {
-  const total = good + neutral + bad;
-
+  if (good === 0 && neutral === 0 && bad === 0) {
+    return (
+      <p>No feedback given</p>
+    );
+  }
+  const totalSum = good + neutral + bad;
   return (
     <>
-      <Heading name="statistics"/>
-      <ShowStats type="good" total={good}/>
-      <ShowStats type="neutral" total={neutral}/>
-      <ShowStats type="bad" total={bad}/>
-      <ShowStats type="all" total={total}/>
-      <CalculatedStats type="average" total={total} subTotal={good - bad}/>
-      <CalculatedStats type="positive" total={total} subTotal={good}/>
+      <StatisticLine text="good" value={good}/>
+      <StatisticLine text="neutral" value={neutral}/>
+      <StatisticLine text="bad" value={bad}/>
+      <StatisticLine text="all" value={totalSum}/>
+      <StatisticLine text="average" value={(good - bad) / totalSum}/>
+      <StatisticLine text="positive" value={((good / totalSum) * 100)}/>
     </>
   );
 };
@@ -73,6 +70,7 @@ const App = () => {
       <Button text="good" onClick={handleGoodFeedback}/>
       <Button text="neutral" onClick={handleNeutralFeedback}/>
       <Button text="bad" onClick={handleBadFeedback}/>
+      <Heading name="statistics"/>
       <Statistic good={good} neutral={neutral} bad={bad}/>
     </div>
   );
