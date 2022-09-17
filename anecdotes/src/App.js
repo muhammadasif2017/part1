@@ -1,12 +1,43 @@
 import { useState } from 'react'
 
+const Heading = ({ text }) => <h1>{text}</h1>
+
 const Button = ({ text, onClick }) => {
   return (
     <button onClick={onClick}>
       {text}
     </button>
+  );
+};
+
+const Anecdote = ({
+  anecdote,
+  vote,
+  handleVote,
+  handleAnecdote
+}) => {
+  return (
+    <div>
+      <Heading text="Anecdote of the day"/>
+      {anecdote}
+      <div>{`has ${vote} votes`}</div>
+      <div>
+        <Button text="vote" onClick={handleVote} />
+        <Button text="next anecdote" onClick={handleAnecdote} />
+      </div>
+    </div>
+  );
+};
+
+const MaxVotedAnecdote = ({ maxVoted }) => {
+  return (
+    <>
+      <Heading text="Anecdote with most votes"/>
+      {maxVoted.name}
+      <div>{`has ${maxVoted.votes} votes`}</div>
+    </>
   )
-}
+};  
 
 const App = () => {
   const anecdotes = [
@@ -36,19 +67,24 @@ const App = () => {
     const copyVote = [ ...vote ];
     copyVote[selected] += 1;
     setVote(copyVote);
-  }
+  };
 
-  console.log(vote);
+  const findAnecdoteWithMostVote = () => {
+    let max = 0;
+    let maxValueIndex = 0;
+    vote.forEach((value, index) => {
+      if (value > max) {
+        max = value;
+        maxValueIndex = index;
+      }
+    });
+    return { name: anecdotes[maxValueIndex], votes: max};
+  };
+
   return (
     <div>
-      {anecdotes[selected]}
-      <div>
-        {`has ${vote[selected]} votes`}
-      </div>
-      <div>
-        <Button text="vote" onClick={handleVote} />
-        <Button text="next anecdote" onClick={handleNextAnecdote} />
-      </div>
+      <Anecdote anecdote={anecdotes[selected]} vote={vote[selected]} handleAnecdote={handleNextAnecdote} handleVote={handleVote}/>
+      <MaxVotedAnecdote maxVoted={findAnecdoteWithMostVote()}/>
     </div>
   )
 }
